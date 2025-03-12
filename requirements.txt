@@ -1,0 +1,4 @@
+confluent-kafka
+sentry_sdk
+prometheus_client
+devtools

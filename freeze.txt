@@ -1,0 +1,5 @@
+certifi==2025.1.31
+confluent-kafka==2.8.2
+prometheus_client==0.21.1
+sentry-sdk==2.22.0
+urllib3==2.3.0
