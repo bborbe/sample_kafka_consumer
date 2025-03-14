@@ -5,10 +5,13 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 import logging
 import signal
-import confluent_kafka
 import sentry_sdk
+from confluent_kafka import Message
 from sentry_sdk import capture_exception
-from pkg import kafka, runner, http
+from pkg import runner, http
+from pkg.consumer import Consumer
+from pkg.message_handler import MessageHandlerFunc
+from pkg.producer import Producer
 
 
 def main(argv):
@@ -60,22 +63,26 @@ def main(argv):
         dsn=sentry_dsn,
     )
 
-    def handle_message(message: confluent_kafka.Message):
+    def handle_message(message: Message):
         message_key = 'None' if message.key() is None else message.key().decode('utf-8')
         message_value = 'None' if message.value() is None else message.value().decode('utf-8')
         logging.info(f"key: {message_key} value: {message_value}")
 
-    consumer = kafka.Consumer(
+    consumer = Consumer(
         kafka_broker=kafka_broker,
         kafka_group=kafka_group,
         kafka_topic=kafka_topic,
-        message_handler=kafka.MessageHandlerFunc(handle_message)
+        message_handler=MessageHandlerFunc(handle_message)
     )
 
     host, port = listen.split(":", 2)
     server = http.Server(
         host=host,
         port=int(port),
+        producer=Producer(
+            kafka_broker=kafka_broker,
+        ),
+        kafka_topic=kafka_topic,
     )
 
     def shutdown():

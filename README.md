@@ -1,4 +1,4 @@
-# Kafka Consumer
+# Kafka
 
 ## Setup Python
 
@@ -9,11 +9,12 @@ curl -fsSL https://pyenv.run | bash
 ```
 
 zsh:
+
 ```
 alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
 ```
 
-### install python 
+### install python
 
 ```
 export LDFLAGS="-L/opt/local/lib"
@@ -32,17 +33,22 @@ pyenv local sample_kafka_consumer
 pip install -r requirements.txt
 ```
 
-
-
-
-
-
-
 ## Start Kafka
 
+```bash
+make format 
+make kafka
 ```
-docker exec -it kafka kafka-console-producer --topic test-topic --bootstrap-server localhost:9092
+
+## Run
+
+```bash
+make run
 ```
+
+## Send Message
+
+http://localhost:9090/sendmessage
 
 ## Doc
 
