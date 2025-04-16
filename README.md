@@ -33,17 +33,14 @@ pyenv local sample_kafka_consumer
 pip install -r requirements.txt
 ```
 
-## Start Kafka
-
-```bash
-make format 
-make kafka
-```
-
 ## Run
 
 ```bash
 make run
+```
+
+```bash
+make runtls
 ```
 
 ## Send Message
@@ -53,3 +50,14 @@ http://localhost:9090/sendmessage
 ## Doc
 
 https://docs.confluent.io/platform/current/clients/confluent-kafka-python/html/index.html
+
+# Get SSL Certs
+
+# kubectl -n strimzi get secret my-cluster-cluster-ca-cert -o jsonpath='{.data.ca\.crt}' | base64 -d > ca.crt
+
+
+```bash
+kubectl -n strimzi get secret test -o jsonpath='{.data.ca\.crt}' | base64 -d > ca.crt
+kubectl -n strimzi get secret test -o jsonpath='{.data.user\.key}' | base64 -d > user.key
+kubectl -n strimzi get secret test -o jsonpath='{.data.user\.crt}' | base64 -d > user.crt
+```

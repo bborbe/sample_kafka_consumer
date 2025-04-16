@@ -6,9 +6,16 @@ deps:
 run:
 	python main.py \
 	--listen='0.0.0.0:9090' \
-	--kafka-broker='127.0.0.1:9092' \
-	--kafka-group='test-group' \
-	--kafka-topic=test-topic
+	--kafka-broker='plain://192.168.178.38:32159' \
+	--kafka-group='test-plain' \
+	--kafka-topic='test'
+
+runtls:
+	python main.py \
+	--listen='0.0.0.0:9090' \
+	--kafka-broker='tls://192.168.178.38:32461' \
+	--kafka-group='test-tls' \
+	--kafka-topic='test'
 
 download:
 	mkdir -p kafka

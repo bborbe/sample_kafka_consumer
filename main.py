@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import getopt
 import os
+import re
 import sys
 from concurrent.futures import ThreadPoolExecutor
 import logging
@@ -53,9 +54,19 @@ def main(argv):
         elif opt in ('-sentry-dsn', '--sentry-dsn'):
             sentry_dsn = arg
 
+    kafka_tls = False
+
+    match = re.search(r'(.+?)://(.+)', kafka_broker)
+    if match:
+        kafka_broker = match.group(2)
+        if match.group(1) in ['tls', 'ssl']:
+            kafka_tls = True
+
+
     logging.info(f'listen = {listen}')
     logging.info(f'sentry_dsn = {sentry_dsn}')
     logging.info(f'kafka_broker = {kafka_broker}')
+    logging.info(f'kafka_tls = {kafka_tls}')
     logging.info(f'kafka_group = {kafka_group}')
     logging.info(f'kafka_topic = {kafka_topic}')
 
@@ -70,6 +81,7 @@ def main(argv):
 
     consumer = Consumer(
         kafka_broker=kafka_broker,
+        kafka_tls=kafka_tls,
         kafka_group=kafka_group,
         kafka_topic=kafka_topic,
         message_handler=MessageHandlerFunc(handle_message)
@@ -81,6 +93,7 @@ def main(argv):
         port=int(port),
         producer=Producer(
             kafka_broker=kafka_broker,
+            kafka_tls=kafka_tls,
         ),
         kafka_topic=kafka_topic,
     )

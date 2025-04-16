@@ -1,1 +1,4 @@
 /kafka
+/user.crt
+/user.key
+/ca.crt
